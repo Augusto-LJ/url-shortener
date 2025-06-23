@@ -6,6 +6,9 @@ namespace UrlShortener.API.Services
 {
     public class UrlShortenerService
     {
+        private const string Base62Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        private const int SlugLength = 8;
+
         public bool RequestDataIsValid(ShortenRequest request)
         {
             if (Uri.TryCreate(request.Url, UriKind.Absolute, out var uriResult))
@@ -17,14 +20,18 @@ namespace UrlShortener.API.Services
             return false;
         }
 
-        public string GenerateHash(string longUrl)
+        public string GenerateSlug()
         {
-            byte[] hashBytes = MD5.HashData(Encoding.UTF8.GetBytes(longUrl));
-            string base64 = Convert.ToBase64String(hashBytes);
-            string cleanBase64 = base64.Replace("+", "").Replace("/", "").Replace("=", "");
+            var bytes = new byte[8];
+            using var rng = RandomNumberGenerator.Create();
 
-            return cleanBase64[..8];
+            rng.GetBytes(bytes);
 
+            var chars = new char[SlugLength];
+            for (int i = 0; i < SlugLength; i++)
+                chars[i] = Base62Chars[bytes[i] % Base62Chars.Length];
+
+            return new string(chars);
         }
     }
 }

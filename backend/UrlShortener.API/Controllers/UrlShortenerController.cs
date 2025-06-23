@@ -20,7 +20,7 @@ namespace UrlShortener.API.Controllers
 
             if (urlShortenerService.RequestDataIsValid(request))
             {
-                var hash = urlShortenerService.GenerateHash(request.Url);
+                var hash = urlShortenerService.GenerateSlug();
                 return Ok(hash);
             }
 
