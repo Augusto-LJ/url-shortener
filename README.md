@@ -4,8 +4,8 @@ Uma aplicação web simples e funcional que permite encurtar links longos, geran
 
 Ciclo de vida de desenvolvimento de software ([SDLC](https://aws.amazon.com/pt/what-is/sdlc/), ou Software Development Life Cycle) da aplicação:
 - ✅ Planejamento
-- 🛠️ **Projeto  (em andamento)**
-- 🔜 Implementação
+- ✅ Projeto
+- 🛠️ **Implementação  (em andamento)**
 - 🔜 Teste
 - 🔜 Implantação
 - 🔜 Manutenção
