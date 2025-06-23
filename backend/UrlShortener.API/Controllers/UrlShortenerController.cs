@@ -13,12 +13,17 @@ namespace UrlShortener.API.Controllers
         /// <returns>Short URL</returns>
         [HttpPost("shorten")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Shorten([FromBody] ShortenRequest request)
         {
             var urlShortenerService = new UrlShortenerService();
 
             if (urlShortenerService.RequestDataIsValid(request))
-                return Ok();
+            {
+                var hash = urlShortenerService.GenerateHash(request.Url);
+                return Ok(hash);
+            }
+
             return BadRequest("Invalid URL.");
         }
     }

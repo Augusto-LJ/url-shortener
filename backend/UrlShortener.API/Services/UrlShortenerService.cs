@@ -1,4 +1,6 @@
-﻿using UrlShortener.API.Models;
+﻿using System.Security.Cryptography;
+using System.Text;
+using UrlShortener.API.Models;
 
 namespace UrlShortener.API.Services
 {
@@ -15,5 +17,14 @@ namespace UrlShortener.API.Services
             return false;
         }
 
+        public string GenerateHash(string longUrl)
+        {
+            byte[] hashBytes = MD5.HashData(Encoding.UTF8.GetBytes(longUrl));
+            string base64 = Convert.ToBase64String(hashBytes);
+            string cleanBase64 = base64.Replace("+", "").Replace("/", "").Replace("=", "");
+
+            return cleanBase64[..8];
+
+        }
     }
 }
