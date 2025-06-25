@@ -1,57 +1,53 @@
-# 🔗 Encurtador de URLs
+# 🔗 URL Shortener
 
-Uma aplicação web simples e funcional que permite encurtar links longos, gerando URLs curtas para fácil compartilhamento. Ideal para quem precisa organizar ou compartilhar links com praticidade e clareza.
+A simple and functional web application that allows you to shorten long links, generating short URLs for easy sharing. Ideal for anyone who needs to organize or share links with practicality and clarity.
 
-Ciclo de vida de desenvolvimento de software ([SDLC](https://aws.amazon.com/pt/what-is/sdlc/), ou Software Development Life Cycle) da aplicação:
-- ✅ Planejamento
-- ✅ Projeto
-- 🛠️ **Implementação  (em andamento)**
-- 🔜 Teste
-- 🔜 Implantação
-- 🔜 Manutenção
+Software Development Life Cycle ([SDLC](https://aws.amazon.com/pt/what-is/sdlc/) of the application:
+- ✅ Planning
+- ✅ Design
+- 🛠️ **Implementation (in progress)**
+- 🔜 Testing
+- 🔜 Deployment
+- 🔜 Maintenance
 
-O modelo de SDLC utilizado neste projeto é o **Ágil**.
-
-## 🚀 Tecnologias
+## 🚀 Technologies
 
 - **Backend**: ASP.NET Core 8
 - **Frontend**: Vue.js 3 + Vite
 - **ORM**: Entity Framework Core
-- **Banco de dados**: SQL Server (Developer local durante o desenvolvimento)
+- **Database**: SQL Server
 - **IDE**: Visual Studio
-- **Controle de versão**: Git + GitHub
-- **Padrões**: RESTful API, Camadas (Controller, Service, Model)
-- **Gerenciamento de pacotes**:
+- **Version Control**: Git + GitHub
+- **Standards**: RESTful API, Camadas (Controller, Service, Model)
+- **Package Management**:
   - Backend: NuGet
   - Frontend: npm
-- **Outros**: Axios (requisições HTTP no frontend), Tailwind CSS
+- **Others**: Axios (requisições HTTP no frontend), Tailwind CSS
 
-## 🎯 Funcionalidades (a serem desenvolvidas)
+## 🎯 Features (to be developed)
 
-- Geração de uma URL encurtada a partir de um link original
-- Redirecionamento da URL curta para a URL original
-- Armazenamento das URLs encurtadas em banco de dados
-- Página com formulário para encurtar URLs
-- Validação da URL digitada pelo usuário
+- Generate a shortened URL from an original link
+- Redirect the short URL to the original URL
+- Store shortened URLs in a database
+- Page with a form to shorten URLs
+- Validation of the URL entered by the user
 
-## 💻 Demonstração
+## 💻 Demo
 
-A preencher
+To be filled in.
 
-## 🛠️ Como vai funcionar o MVP?
+## 🛠️ How will the MVP work?
 
-- O usuário acessa uma tela com um campo de input
-- O usuário insere uma URL longa no campo
-- Ao clicar em "Encurtar", a aplicação envia a URL para o backend
-- O backend retorna a URL encurtada ao usuário (ex: `https://meuencurtador.com/abc123`)
-- Quando alguém acessa `https://meuencurtador.com/abc123`, o sistema redireciona para a URL original
+- The user accesses a screen with an input field
+- The user enters a long URL in the field
+- When clicking "Shorten", the app sends the URL to the backend
+- The backend returns the shortened URL to the user (e.g., https://myshortener.com/abc123)
+- When someone accesses https://myshortener.com/abc123, the system redirects to the original URL
 
-## 🔜 Futuras melhorias
+## 🔜 Future improvements
 
-- Autenticação e login de usuário
-- Usuário pode visualizar suas URLs encurtadas favoritas
-- Possibilidade de deletar ou desativar URLs
-- Relatórios de cliques por URL (quantidade, data, etc)
-- Expiração automática de URLs (por data ou por número de acessos)
-- Integração com serviços externos (ex: APIs de analytics)
-- Área administrativa para gerenciamento de URLs
+- User authentication and login
+- Users can view their favorite shortened URLs
+- Option to delete or deactivate URLs
+- Click reports per URL (count, date, etc.)
+- Automatic URL expiration (by date or number of accesses)
