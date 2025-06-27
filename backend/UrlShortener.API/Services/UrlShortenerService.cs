@@ -1,6 +1,5 @@
 ﻿using System.Security.Cryptography;
-using System.Text;
-using UrlShortener.API.Models;
+using UrlShortener.API.Models.Request;
 
 namespace UrlShortener.API.Services
 {

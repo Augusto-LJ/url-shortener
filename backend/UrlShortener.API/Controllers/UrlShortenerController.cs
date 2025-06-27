@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UrlShortener.API.Models;
+using UrlShortener.API.Models.Request;
 using UrlShortener.API.Services;
 
 namespace UrlShortener.API.Controllers

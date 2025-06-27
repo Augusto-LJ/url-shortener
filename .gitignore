@@ -1,12 +1,12 @@
 ########################################
-# 📂 Diretórios padrão do Visual Studio
+# 📂 Standard Visual Studio directories
 ########################################
 .vs/
 **/bin/
 **/obj/
 
 ########################################
-# 🧑‍💻 Arquivos de usuário e temporários
+# 🧑‍💻 User-specific and temporary files
 ########################################
 *.user
 *.suo
@@ -16,13 +16,13 @@
 *.svclog
 
 ########################################
-# ⚙️ Arquivos de build e publish
+# ⚙️ Build and publish artifacts
 ########################################
 **/publish/
 **/out/
 
 ########################################
-# 🛠️ Arquivos de log e backups
+# 🛠️ Logs and backup files
 ########################################
 *.log
 *.tlog
@@ -32,22 +32,27 @@
 *.old
 
 ########################################
-# 📦 Pacotes gerados localmente
+# 📦 Locally generated NuGet packages
 ########################################
 *.nupkg
 *.snupkg
 *.nuspec
 
 ########################################
-# 🔐 Configurações e segredos locais
+# 🔐 Secrets and local environment configs
 ########################################
 secrets.json
 *.env
 *.env.*
 
 ########################################
-# 🖼️ Arquivos de sistema
+# 🖼️ System files
 ########################################
 .DS_Store
 Thumbs.db
 ehthumbs.db
+
+########################################
+# ❗ Keep EF Core migrations tracked in Git
+########################################
+# Do NOT ignore the Migrations folder
