@@ -1,10 +1,15 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using UrlShortener.API.Contexts;
+using UrlShortener.API.Models.Entities;
 using UrlShortener.API.Models.Request;
 
 namespace UrlShortener.API.Services
 {
-    public class UrlShortenerService
+    public class UrlShortenerService(ApplicationDbContext context) : IUrlShortenerService
     {
+        private readonly ApplicationDbContext _context = context;
+
         private const string Base62Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         private const int SlugLength = 8;
 
@@ -31,6 +36,33 @@ namespace UrlShortener.API.Services
                 chars[i] = Base62Chars[bytes[i] % Base62Chars.Length];
 
             return new string(chars);
+        }
+
+        public async Task<string?> CreateUniqueSlugAsync()
+        {
+            string slug;
+
+            do
+            {
+                slug = GenerateSlug();
+            } while (await _context.ShortUrls.AnyAsync(x => x.Slug == slug));
+
+            return slug;
+        }
+
+        public async Task SaveShortUrlAsync(string originalUrl, string slug)
+        {
+            if (string.IsNullOrWhiteSpace(originalUrl) || string.IsNullOrWhiteSpace(slug))
+                throw new ArgumentException("OriginalUrl and hash must not be empty.");
+
+            var shortUrl = new ShortUrl
+            {
+                OriginalUrl = originalUrl,
+                Slug = slug
+            };
+
+            _context.ShortUrls.Add(shortUrl);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -5,8 +5,10 @@ using UrlShortener.API.Services;
 namespace UrlShortener.API.Controllers
 {
     [ApiController]
-    public class UrlShortenerController : Controller
+    public class UrlShortenerController(IUrlShortenerService urlShortenerService) : ControllerBase
     {
+        private readonly IUrlShortenerService _urlShortenerService = urlShortenerService;
+
         /// <summary>
         /// Returns a short URL
         /// </summary>
@@ -14,14 +16,13 @@ namespace UrlShortener.API.Controllers
         [HttpPost("shorten")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult Shorten([FromBody] ShortenRequest request)
+        public async Task<IActionResult> ShortenAsync([FromBody] ShortenRequest request)
         {
-            var urlShortenerService = new UrlShortenerService();
-
-            if (urlShortenerService.RequestDataIsValid(request))
+            if (_urlShortenerService.RequestDataIsValid(request))
             {
-                var hash = urlShortenerService.GenerateSlug();
-                return Ok(hash);
+                var slug = await urlShortenerService.CreateUniqueSlugAsync();
+                await urlShortenerService.SaveShortUrlAsync(request.Url, slug);
+                return Ok(slug);
             }
 
             return BadRequest("Invalid URL.");
