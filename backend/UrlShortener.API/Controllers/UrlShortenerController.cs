@@ -20,14 +20,31 @@ namespace UrlShortener.API.Controllers
         {
             if (_urlShortenerService.RequestDataIsValid(request))
             {
-                var slug = await urlShortenerService.CreateUniqueSlugAsync();
-                await urlShortenerService.SaveShortUrlAsync(request.Url, slug);
+                var slug = await _urlShortenerService.CreateUniqueSlugAsync();
+                await _urlShortenerService.SaveShortUrlAsync(request.Url, slug);
 
                 var shortUrl = $"{Request.Scheme}://{Request.Host}/{slug}";
                 return Ok(shortUrl);
             }
 
             return BadRequest("Invalid URL.");
+        }
+
+        /// <summary>
+        /// Redirects to the original URL
+        /// </summary>
+        /// <returns>Redirects to the original URL</returns>
+        [HttpGet("{slug}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status302Found)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> RedirectToOriginalUrl([FromRoute] string slug)
+        {
+            var longUrl = await _urlShortenerService.GetOriginalUrlAsync(slug);
+
+            if (!string.IsNullOrWhiteSpace(longUrl))
+                return Redirect(longUrl);
+
+            return NotFound($"URL not found for the following slug: {slug}");
         }
     }
 }
