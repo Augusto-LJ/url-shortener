@@ -18,11 +18,11 @@ Software Development Life Cycle ([SDLC](https://aws.amazon.com/pt/what-is/sdlc/)
 - **Database**: SQL Server
 - **IDE**: Visual Studio
 - **Version Control**: Git + GitHub
-- **Standards**: RESTful API, Camadas (Controller, Service, Model)
+- **Standards**: RESTful API, Layers (Controller, Service, Model)
 - **Package Management**:
   - Backend: NuGet
   - Frontend: npm
-- **Others**: Axios (requisições HTTP no frontend), Tailwind CSS
+- **Others**: Axios (HTTP requests on frontend), Tailwind CSS
 
 ## 🎯 Features (to be developed)
 
