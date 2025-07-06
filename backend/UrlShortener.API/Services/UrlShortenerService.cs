@@ -24,7 +24,7 @@ namespace UrlShortener.API.Services
             return false;
         }
 
-        public string GenerateSlug()
+        private string GenerateSlug()
         {
             var bytes = new byte[8];
             using var rng = RandomNumberGenerator.Create();
@@ -63,6 +63,13 @@ namespace UrlShortener.API.Services
 
             _context.ShortUrls.Add(shortUrl);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<string?> GetOriginalUrlAsync(string slug)
+        {
+            var shortUrl = await _context.ShortUrls.AsNoTracking().FirstOrDefaultAsync(x => x.Slug == slug);
+
+            return shortUrl?.OriginalUrl;
         }
     }
 }

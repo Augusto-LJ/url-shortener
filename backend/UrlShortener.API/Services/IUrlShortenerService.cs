@@ -7,5 +7,6 @@ namespace UrlShortener.API.Services
         bool RequestDataIsValid(ShortenRequest request);
         Task<string?> CreateUniqueSlugAsync();
         Task SaveShortUrlAsync(string originalUrl, string slug);
+        Task<string?> GetOriginalUrlAsync(string slug);
     }
 }
