@@ -22,7 +22,9 @@ namespace UrlShortener.API.Controllers
             {
                 var slug = await urlShortenerService.CreateUniqueSlugAsync();
                 await urlShortenerService.SaveShortUrlAsync(request.Url, slug);
-                return Ok(slug);
+
+                var shortUrl = $"{Request.Scheme}://{Request.Host}/{slug}";
+                return Ok(shortUrl);
             }
 
             return BadRequest("Invalid URL.");
