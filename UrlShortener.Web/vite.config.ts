@@ -1,10 +1,15 @@
 import { defineConfig } from 'vite';
-import plugin from '@vitejs/plugin-vue';
+import vue from '@vitejs/plugin-vue';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [plugin()],
-    server: {
-        port: 64596,
-    }
-})
+  plugins: [vue()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://localhost:7294', // URL da sua API backend
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
+});
