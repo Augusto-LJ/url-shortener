@@ -3,22 +3,43 @@
 
     <h1>URL Shortener!</h1>
 
-    <form>
-      <input type="url" placeholder="http://www.yoursite.com" required />
+    <form @submit.prevent="handleSubmit">
+      <input type="url"
+             placeholder="http://www.yourlongurl.com"
+             v-model="longUrl"
+             required
+      />
       <button type="submit">Shorten</button>
     </form>
 
-    <div class="resultado">
+    <div class="result" v-if="shortUrl">
       <p>You short URL:</p>
-      <a target="_blank"></a>
+      <a :href="shortUrl" target="_blank">{{ shortUrl }}</a>
     </div>
 
-    <p class="erro">Error</p>
+    <p class="error" v-if="error">{{ error }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
-  
+  import { ref } from 'vue'
+  import { shortenUrl } from './services/UrlShortenerService'
+
+  const longUrl = ref('');
+  const shortUrl = ref('');
+  const error = ref('');
+
+  async function handleSubmit() {
+    error.value = '';
+    shortUrl.value = '';
+
+    try {
+      const response = await shortenUrl(longUrl.value);
+      shortUrl.value = response;
+    } catch (err: any) {
+      error.value = err.message || 'Error while shortening the URL.';
+    }
+  }
 </script>
 
 <style scoped>
@@ -30,42 +51,31 @@
   }
 
   form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 1.5rem;
+    margin-bottom: 1rem;
   }
 
   input {
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
+    padding: 0.5rem;
+    width: 70%;
+    margin-right: 0.5rem;    
   }
 
   button {
-    padding: 0.75rem;
-    font-size: 1rem;
-    background-color: #1e88e5;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    padding: 0.5rem 1rem;
   }
 
     button:hover {
       background-color: #1565c0;
     }
 
-  .resultado {
-    margin-top: 2rem;
-    font-size: 1.1rem;
+  .result {
+    margin-top: 1rem;
+    font-weight: bold;
   }
 
-  .erro {
+  .error {
     margin-top: 1rem;
     color: red;
     font-weight: bold;
   }
-
 </style>
