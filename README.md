@@ -5,8 +5,8 @@ A simple and functional web application that allows you to shorten long links, g
 Software Development Life Cycle ([SDLC](https://aws.amazon.com/pt/what-is/sdlc/) of the application:
 - ✅ Planning
 - ✅ Design
-- 🛠️ **Implementation (in progress)**
-- 🔜 Testing
+- ✅ Implementation (in progress)
+- 🛠️ **Testing**
 - 🔜 Deployment
 - 🔜 Maintenance
 
