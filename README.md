@@ -2,11 +2,11 @@
 
 A simple and functional web application that allows you to shorten long links, generating short URLs for easy sharing. Ideal for anyone who needs to organize or share links with practicality and clarity.
 
-Software Development Life Cycle ([SDLC](https://aws.amazon.com/pt/what-is/sdlc/) of the application:
+Software Development Life Cycle ([SDLC](https://aws.amazon.com/pt/what-is/sdlc/)) of the application:
 - ✅ Planning
 - ✅ Design
-- 🛠️ **Implementation (in progress)**
-- 🔜 Testing
+- ✅ Implementation
+- 🔜 **Testing**
 - 🔜 Deployment
 - 🔜 Maintenance
 
@@ -34,7 +34,7 @@ Software Development Life Cycle ([SDLC](https://aws.amazon.com/pt/what-is/sdlc/)
 
 ## 💻 Demo
 
-To be filled in.
+<img width="1874" height="935" alt="image" src="https://github.com/user-attachments/assets/a44a9593-4be9-4dd8-aeab-25e24e2c2a97" />
 
 ## 🛠️ How will the MVP work?
 
