@@ -1,12 +1,27 @@
 services:
+    db:
+        image: postgres:16
+        container_name: urlshortener_db
+        restart: always
+        environment:
+          POSTGRES_DB: urlshortener
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - "5432:5432"
+        volumes:
+          - pgdata:/var/lib/postgresql/data
+
     api:
         build: ./UrlShortener.API
         container_name: urlshortener_api
         ports:
             - "5000:8080"
         environment:
-            ASPNETCORE_ENVIRONMENT: Production
-            ConnectionStrings__Default: ${ConnectionStrings__Default}
+            ASPNETCORE_ENVIRONMENT: Development
+            ConnectionStrings__Default: Host=db;Port=5432;Database=urlshortener;Username=postgres;Password=postgres
+        depends_on:
+            - db
 
     web:
         build: ./UrlShortener.Web
@@ -14,4 +29,7 @@ services:
             - "3000:80"
         depends_on:
             - api
+
+volumes:
+  pgdata:
         
