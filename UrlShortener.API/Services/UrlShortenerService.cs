@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using System.Security.Cryptography;
 using UrlShortener.API.Contexts;
 using UrlShortener.API.Models.Entities;
@@ -38,22 +39,25 @@ namespace UrlShortener.API.Services
             return new string(chars);
         }
 
-        public async Task<string?> CreateUniqueSlugAsync()
+        public async Task<string> CreateUniqueSlugAsync()
         {
-            string slug;
+            const int maxAttempts = 10;
 
-            do
+            for (int i = 0; i < maxAttempts; i++)
             {
-                slug = GenerateSlug();
-            } while (await _context.ShortUrls.AnyAsync(x => x.Slug == slug));
+                var slug = GenerateSlug();
 
-            return slug;
+                if (!await _context.ShortUrls.AnyAsync(x => x.Slug == slug))
+                    return slug;
+            }
+
+            throw new InvalidOperationException("Failed to generate a unique slug.");
         }
 
         public async Task SaveShortUrlAsync(string originalUrl, string slug)
         {
             if (string.IsNullOrWhiteSpace(originalUrl) || string.IsNullOrWhiteSpace(slug))
-                throw new ArgumentException("OriginalUrl and hash must not be empty.");
+                throw new ArgumentException("OriginalUrl and slug must not be empty.");
 
             var shortUrl = new ShortUrl
             {
@@ -62,7 +66,21 @@ namespace UrlShortener.API.Services
             };
 
             _context.ShortUrls.Add(shortUrl);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (IsUniqueViolation(ex))
+            {
+                throw new InvalidOperationException("Slug collision detected.", ex);
+            }
+        }
+
+        private static bool IsUniqueViolation(DbUpdateException ex)
+        {
+            return ex.InnerException is PostgresException pg
+                   && pg.SqlState == PostgresErrorCodes.UniqueViolation;
         }
 
         public async Task<string?> GetOriginalUrlAsync(string slug)
