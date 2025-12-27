@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
   import { ref } from 'vue'
-  import { shortenUrl } from './services/UrlShortenerService'
+  import { shortenUrl } from './services/urlShortenerService'
 
   const longUrl = ref('');
   const shortUrl = ref('');
