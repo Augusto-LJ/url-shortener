@@ -4,15 +4,14 @@ using UrlShortener.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Controllers & Swagger
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Services
 builder.Services.AddScoped<IUrlShortenerService, UrlShortenerService>();
-
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 // CORS
@@ -24,7 +23,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        if (allowedOrigins != null && allowedOrigins.Length > 0)
+        if (allowedOrigins is { Length: > 0 })
         {
             policy.WithOrigins(allowedOrigins)
                   .AllowAnyHeader()
@@ -34,8 +33,7 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddControllers();
-
+// Railway port binding
 var port = Environment.GetEnvironmentVariable("PORT");
 
 if (!string.IsNullOrEmpty(port))
@@ -59,11 +57,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
-
 app.UseCors("AllowFrontend");
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

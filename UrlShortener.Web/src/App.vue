@@ -13,7 +13,7 @@
     </form>
 
     <div class="result" v-if="shortUrl">
-      <p>You short URL:</p>
+      <p>Your short URL:</p>
       <a :href="shortUrl" target="_blank">{{ shortUrl }}</a>
     </div>
 
