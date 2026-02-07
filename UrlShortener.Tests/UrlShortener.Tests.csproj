@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -24,6 +24,18 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Integration\DbContext\" />
+    <Folder Include="Integration\Api\" />
+    <Folder Include="Fixtures\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Constants\" />
+    <Folder Include="Unit\Domain\" />
+    <Folder Include="Unit\Utilities\" />
+    <Folder Include="Unit\Validation\" />
+    <Folder Include="Unit\Services\" />
   </ItemGroup>
 
 </Project>

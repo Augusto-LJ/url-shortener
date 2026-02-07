@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using UrlShortener.API.Contexts;
 using UrlShortener.API.Services;
 
-namespace UrlShortener.Tests;
+namespace UrlShortener.Tests.Integration.Persistence;
 
-public class UrlShortenerServiceTests
+public class ShortUrlPersistenceTests
 {
     private readonly ApplicationDbContext _db;
     private readonly UrlShortenerService _service;
 
-    public UrlShortenerServiceTests()
+    public ShortUrlPersistenceTests()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
@@ -21,6 +21,7 @@ public class UrlShortenerServiceTests
     }
 
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task SaveShortUrlAsync_ValidData_PersistsEntity()
     {
         // Arrange
