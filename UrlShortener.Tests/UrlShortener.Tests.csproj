@@ -35,7 +35,6 @@
     <Folder Include="Unit\Domain\" />
     <Folder Include="Unit\Utilities\" />
     <Folder Include="Unit\Validation\" />
-    <Folder Include="Unit\Services\" />
   </ItemGroup>
 
 </Project>
