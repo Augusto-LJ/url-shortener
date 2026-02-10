@@ -5,11 +5,11 @@ using UrlShortener.API.Models.Request;
 using UrlShortener.API.Services;
 
 namespace UrlShortener.Tests.Unit.Services;
-public class UrlShortenerServiceTests
+public class UrlShortenerServiceUnitTests
 {
     private readonly UrlShortenerService _service;
 
-    public UrlShortenerServiceTests()
+    public UrlShortenerServiceUnitTests()
     {
         var dummyContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().Options);
 
