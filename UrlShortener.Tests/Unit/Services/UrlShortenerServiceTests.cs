@@ -60,4 +60,19 @@ public class UrlShortenerServiceTests
         // Assert
         result.Should().BeFalse();
     }
+
+    [Fact]
+    [Trait("Category", "Unit")]
+    public void RequestDataIsValid_NullUrl_ReturnsFalse()
+    {
+        // Arrange
+        var request = new ShortenRequest { Url = null };
+
+        // Act
+        var sut = _service;
+        var result = sut.RequestDataIsValid(request);
+
+        // Assert
+        result.Should().BeFalse();
+    }
 }
