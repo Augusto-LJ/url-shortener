@@ -27,11 +27,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Integration\DbContext\" />
+    <Folder Include="Integration\Database\" />
     <Folder Include="Integration\Api\" />
-    <Folder Include="Fixtures\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Constants\" />
+    <Folder Include="Integration\Services\" />
+    <Folder Include="Shared\Fixtures\" />
+    <Folder Include="Shared\Helpers\" />
+    <Folder Include="Shared\Constants\" />
+    <Folder Include="Shared\" />
     <Folder Include="Unit\Domain\" />
     <Folder Include="Unit\Utilities\" />
     <Folder Include="Unit\Validation\" />
