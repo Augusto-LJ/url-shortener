@@ -25,7 +25,7 @@ namespace UrlShortener.API.Services
             return false;
         }
 
-        private string GenerateSlug()
+        protected virtual string GenerateSlug()
         {
             var bytes = new byte[8];
             using var rng = RandomNumberGenerator.Create();

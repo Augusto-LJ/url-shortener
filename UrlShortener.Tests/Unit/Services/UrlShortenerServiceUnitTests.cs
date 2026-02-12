@@ -8,13 +8,15 @@ namespace UrlShortener.Tests.Unit.Services;
 public class UrlShortenerServiceUnitTests
 {
     private readonly UrlShortenerService _service;
+    private readonly ApplicationDbContext _dummyContext;
 
     public UrlShortenerServiceUnitTests()
     {
-        var dummyContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().Options);
-
-        _service = new UrlShortenerService(dummyContext);
+        _dummyContext = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().Options);
+        _service = new UrlShortenerService(_dummyContext);
     }
+
+    #region RequestDataIsValid
 
     [Theory]
     [Trait("Category", "Unit")]
@@ -28,9 +30,9 @@ public class UrlShortenerServiceUnitTests
     {
         // Arrange
         var request = new ShortenRequest { Url = url };
+        var sut = _service;
 
         // Act
-        var sut = _service;
         var result = sut.RequestDataIsValid(request);
 
         // Assert
@@ -52,9 +54,9 @@ public class UrlShortenerServiceUnitTests
     {
         // Arrange
         var request = new ShortenRequest { Url = url };
+        var sut = _service;
 
         // Act
-        var sut = _service;
         var result = sut.RequestDataIsValid(request);
 
         // Assert
@@ -67,12 +69,80 @@ public class UrlShortenerServiceUnitTests
     {
         // Arrange
         var request = new ShortenRequest { Url = null };
+        var sut = _service;
 
         // Act
-        var sut = _service;
         var result = sut.RequestDataIsValid(request);
 
         // Assert
         result.Should().BeFalse();
     }
+    #endregion
+
+    #region GenerateSlug
+    /// <summary>
+    /// Testable subclass that exposes the protected GenerateSlug method for testing.
+    /// </summary>
+    private class TestableUrlShortenerService(ApplicationDbContext context) : UrlShortenerService(context)
+    {
+        public string PublicGenerateSlug() => GenerateSlug();
+    }
+
+    [Fact]
+    [Trait("Category", "Unit")]
+    public void GenerateSlug_ReturnsNonNullOrWhiteSpace()
+    {
+        // Arrange
+        var sut = new TestableUrlShortenerService(_dummyContext);
+
+        // Act
+        var slug = sut.PublicGenerateSlug();
+
+        // Assert
+        slug.Should().NotBeNullOrWhiteSpace();
+    }
+
+    [Fact]
+    [Trait("Category", "Unit")]
+    public void GenerateSlug_WhenCalled_ReturnsEightCharacterSlug()
+    {
+        // Arrange
+        var sut = new TestableUrlShortenerService(_dummyContext);
+
+        // Act
+        var slug = sut.PublicGenerateSlug();
+
+        // Assert
+        slug.Should().HaveLength(8);
+    }
+
+    [Fact]
+    [Trait("Category", "Unit")]
+    public void GenerateSlug_WhenCalled_ReturnsSlugWithOnlyBase62Characters()
+    {
+        // Arrange
+        var sut = new TestableUrlShortenerService(_dummyContext);
+
+        // Act
+        var slug = sut.PublicGenerateSlug();
+
+        // Assert
+        slug.Should().MatchRegex("^[a-zA-Z0-9]{8}$");
+    }
+
+    [Fact]
+    [Trait("Category", "Unit")]
+    public void GenerateSlug_WhenCalledMoreThanOnce_ProducesDifferentSlugs()
+    {
+        // Arrange
+        var sut = new TestableUrlShortenerService(_dummyContext);
+
+        // Act
+        var slug1 = sut.PublicGenerateSlug();
+        var slug2 = sut.PublicGenerateSlug();
+
+        // Assert
+        slug1.Should().NotBe(slug2);
+    }
+    #endregion
 }
