@@ -1,43 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using System.Security.Cryptography;
 using UrlShortener.API.Contexts;
 using UrlShortener.API.Models.Entities;
-using UrlShortener.API.Models.Request;
+using UrlShortener.API.Services.Interfaces;
 
 namespace UrlShortener.API.Services
 {
-    public class UrlShortenerService(ApplicationDbContext context) : IUrlShortenerService
+    public class UrlShortenerService(ApplicationDbContext context,
+                                     ISlugGenerator slugGenerator) : IUrlShortenerService
     {
         private readonly ApplicationDbContext _context = context;
-
-        private const string Base62Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        private const int SlugLength = 8;
-
-        public bool RequestDataIsValid(ShortenRequest request)
-        {
-            if (Uri.TryCreate(request.Url, UriKind.Absolute, out var uriResult))
-            {
-                return (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps)
-                       && !string.IsNullOrWhiteSpace(uriResult.Host);
-            }
-
-            return false;
-        }
-
-        protected virtual string GenerateSlug()
-        {
-            var bytes = new byte[8];
-            using var rng = RandomNumberGenerator.Create();
-
-            rng.GetBytes(bytes);
-
-            var chars = new char[SlugLength];
-            for (int i = 0; i < SlugLength; i++)
-                chars[i] = Base62Chars[bytes[i] % Base62Chars.Length];
-
-            return new string(chars);
-        }
+        private readonly ISlugGenerator _slugGenerator = slugGenerator;
 
         public async Task<string> CreateUniqueSlugAsync()
         {
@@ -45,7 +18,7 @@ namespace UrlShortener.API.Services
 
             for (int i = 0; i < maxAttempts; i++)
             {
-                var slug = GenerateSlug();
+                var slug = _slugGenerator.GenerateSlug();
 
                 if (!await _context.ShortUrls.AnyAsync(x => x.Slug == slug))
                     return slug;
