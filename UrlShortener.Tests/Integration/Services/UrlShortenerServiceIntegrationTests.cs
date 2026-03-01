@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using UrlShortener.API.Contexts;
 using UrlShortener.API.Models.Entities;
 using UrlShortener.API.Services;
-using Xunit;
 
 namespace UrlShortener.Tests.Integration.Services
 {
     public class UrlShortenerServiceIntegrationTests
     {
+        public readonly SlugGenerator _slugGenerator = new();
         private ApplicationDbContext CreateInMemoryContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -19,7 +19,7 @@ namespace UrlShortener.Tests.Integration.Services
 
         private UrlShortenerService CreateService(ApplicationDbContext context)
         {
-            return new UrlShortenerService(context);
+            return new UrlShortenerService(context, _slugGenerator);
         }
 
         #region CreateUniqueSlugAsync

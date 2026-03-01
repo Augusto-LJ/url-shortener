@@ -9,6 +9,7 @@ public class ShortUrlPersistenceTests
 {
     private readonly ApplicationDbContext _db;
     private readonly UrlShortenerService _service;
+    private readonly SlugGenerator _slugGenerator;
 
     public ShortUrlPersistenceTests()
     {
@@ -17,7 +18,8 @@ public class ShortUrlPersistenceTests
             .Options;
 
         _db = new ApplicationDbContext(options);
-        _service = new UrlShortenerService(_db);
+        _slugGenerator = new SlugGenerator();
+        _service = new UrlShortenerService(_db, _slugGenerator);
     }
 
     [Fact]
