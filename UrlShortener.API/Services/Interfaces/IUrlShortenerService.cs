@@ -1,11 +1,10 @@
 ﻿using UrlShortener.API.Models.Request;
 
-namespace UrlShortener.API.Services
+namespace UrlShortener.API.Services.Interfaces
 {
     public interface IUrlShortenerService
     {
-        bool RequestDataIsValid(ShortenRequest request);
-        Task<string?> CreateUniqueSlugAsync();
+        Task<string> CreateUniqueSlugAsync();
         Task SaveShortUrlAsync(string originalUrl, string slug);
         Task<string?> GetOriginalUrlAsync(string slug);
     }

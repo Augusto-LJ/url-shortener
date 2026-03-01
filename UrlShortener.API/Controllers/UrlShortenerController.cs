@@ -1,13 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UrlShortener.API.Controllers.Interfaces;
 using UrlShortener.API.Models.Request;
-using UrlShortener.API.Services;
+using UrlShortener.API.Services.Interfaces;
 
 namespace UrlShortener.API.Controllers
 {
     [ApiController]
-    public class UrlShortenerController(IUrlShortenerService urlShortenerService) : ControllerBase
+    [Route("api")]
+    public class UrlShortenerController(IUrlShortenerService urlShortenerService,
+                                        IUrlValidator urlValidator,
+                                        IUrlBuilder urlBuilder) : ControllerBase
     {
         private readonly IUrlShortenerService _urlShortenerService = urlShortenerService;
+        private readonly IUrlValidator _urlValidator = urlValidator;
+        private readonly IUrlBuilder _urlBuilder = urlBuilder;
 
         /// <summary>
         /// Returns a short URL
@@ -18,16 +24,14 @@ namespace UrlShortener.API.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ShortenAsync([FromBody] ShortenRequest request)
         {
-            if (_urlShortenerService.RequestDataIsValid(request))
-            {
-                var slug = await _urlShortenerService.CreateUniqueSlugAsync();
-                await _urlShortenerService.SaveShortUrlAsync(request.Url, slug);
+            if (!_urlValidator.RequestDataIsValid(request.Url))
+                return BadRequest("Invalid URL.");
 
-                var shortUrl = $"{Request.Scheme}://{Request.Host}/{slug}";
-                return Ok(shortUrl);
-            }
+            var slug = await _urlShortenerService.CreateUniqueSlugAsync();
+            await _urlShortenerService.SaveShortUrlAsync(request.Url, slug);
 
-            return BadRequest("Invalid URL.");
+            var shortUrl = _urlBuilder.BuildShortUrl(slug);
+            return Ok(shortUrl);
         }
 
         /// <summary>
