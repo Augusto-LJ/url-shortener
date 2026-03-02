@@ -46,7 +46,7 @@ namespace UrlShortener.API.Services
             }
             catch (DbUpdateException ex) when (IsUniqueViolation(ex))
             {
-                throw new InvalidOperationException("Slug collision detected.", ex);
+                throw new DbUpdateException("Slug collision detected.", ex);
             }
         }
 
