@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using UrlShortener.API.Contexts;
+using UrlShortener.API.Data;
 using UrlShortener.API.Services;
 using UrlShortener.API.Services.Interfaces;
 
@@ -12,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Services
+builder.Services.AddScoped<IUrlShortenerRepository, UrlShortenerRepository>();
 builder.Services.AddScoped<IUrlShortenerService, UrlShortenerService>();
 builder.Services.AddScoped<ISlugGenerator, SlugGenerator>();
 builder.Services.AddScoped<IUrlValidator, UrlValidator>();

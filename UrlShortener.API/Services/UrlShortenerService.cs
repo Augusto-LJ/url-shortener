@@ -1,15 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Npgsql;
-using UrlShortener.API.Contexts;
+﻿using UrlShortener.API.Contexts;
+using UrlShortener.API.Data;
 using UrlShortener.API.Models.Entities;
 using UrlShortener.API.Services.Interfaces;
 
 namespace UrlShortener.API.Services
 {
-    public class UrlShortenerService(ApplicationDbContext context,
+    public class UrlShortenerService(IUrlShortenerRepository repository,
                                      ISlugGenerator slugGenerator) : IUrlShortenerService
     {
-        private readonly ApplicationDbContext _context = context;
+        private readonly IUrlShortenerRepository _repository = repository;
         private readonly ISlugGenerator _slugGenerator = slugGenerator;
 
         public async Task<string> CreateUniqueSlugAsync()
@@ -20,7 +19,7 @@ namespace UrlShortener.API.Services
             {
                 var slug = _slugGenerator.GenerateSlug();
 
-                if (!await _context.ShortUrls.AnyAsync(x => x.Slug == slug))
+                if (!await _repository.SlugExistsAsync(slug))
                     return slug;
             }
 
@@ -29,8 +28,8 @@ namespace UrlShortener.API.Services
 
         public async Task SaveShortUrlAsync(string originalUrl, string slug)
         {
-            if (string.IsNullOrWhiteSpace(originalUrl) || string.IsNullOrWhiteSpace(slug))
-                throw new ArgumentException("OriginalUrl and slug must not be empty.");
+            ArgumentException.ThrowIfNullOrWhiteSpace(originalUrl);
+            ArgumentException.ThrowIfNullOrWhiteSpace(slug);
 
             var shortUrl = new ShortUrl
             {
@@ -38,27 +37,12 @@ namespace UrlShortener.API.Services
                 Slug = slug
             };
 
-            _context.ShortUrls.Add(shortUrl);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException ex) when (IsUniqueViolation(ex))
-            {
-                throw new DbUpdateException("Slug collision detected.", ex);
-            }
-        }
-
-        private static bool IsUniqueViolation(DbUpdateException ex)
-        {
-            return ex.InnerException is PostgresException pg
-                   && pg.SqlState == PostgresErrorCodes.UniqueViolation;
+            await _repository.SaveShortUrlAsync(shortUrl);
         }
 
         public async Task<string?> GetOriginalUrlAsync(string slug)
         {
-            var shortUrl = await _context.ShortUrls.AsNoTracking().FirstOrDefaultAsync(x => x.Slug == slug);
+            var shortUrl = await _repository.GetOriginalUrlBySlugAsync(slug);
 
             return shortUrl?.OriginalUrl;
         }
