@@ -32,6 +32,7 @@
   <ItemGroup>
     <Folder Include="Integration\Database\" />
     <Folder Include="Integration\Api\" />
+    <Folder Include="Integration\Persistence\" />
     <Folder Include="Shared\Fixtures\" />
     <Folder Include="Shared\Helpers\" />
     <Folder Include="Shared\Constants\" />

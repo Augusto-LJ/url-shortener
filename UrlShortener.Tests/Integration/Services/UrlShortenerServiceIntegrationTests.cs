@@ -2,6 +2,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using UrlShortener.API.Contexts;
+using UrlShortener.API.Data;
 using UrlShortener.API.Models.Entities;
 using UrlShortener.API.Services;
 
@@ -35,7 +36,7 @@ namespace UrlShortener.Tests.Integration.Services
 
         private UrlShortenerService CreateService(ApplicationDbContext context)
         {
-            return new UrlShortenerService(context, _slugGenerator);
+            return new UrlShortenerService(new UrlShortenerRepository(context), _slugGenerator);
         }
 
         #region CreateUniqueSlugAsync
@@ -136,7 +137,58 @@ namespace UrlShortener.Tests.Integration.Services
         #endregion
 
         #region GetOriginalUrlAsync
+        [Fact]
+        [Trait("Category", "Integration")]
+        public async Task GetOriginalUrlAsync_SlugExists_ReturnsOriginalUrl()
+        {
+            // Arrange
+            var context = CreateInMemoryContext();
+            var sut = CreateService(context);
+            const string originalUrl = "https://www.google.com";
+            const string slug = "aBc123Xy";
+            await sut.SaveShortUrlAsync(originalUrl, slug);
 
+            // Act
+            var result = await sut.GetOriginalUrlAsync(slug);
+
+            // Assert
+            result.Should().Be(originalUrl);
+        }
+
+        [Fact]
+        [Trait("Category", "Integration")]
+        public async Task GetOriginalUrlAsync_SlugDoesNotExist_ReturnsNull()
+        {
+            // Arrange
+            var context = CreateInMemoryContext();
+            var sut = CreateService(context);
+            const string slug = "nonexistent";
+
+            // Act
+            var result = await sut.GetOriginalUrlAsync(slug);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [Fact]
+        [Trait("Category", "Integration")]
+        public async Task GetOriginalUrlAsync_MultipleUrls_ReturnsCorrectOne()
+        {
+            // Arrange
+            var context = CreateInMemoryContext();
+            var sut = CreateService(context);
+            await sut.SaveShortUrlAsync("https://first.com", "slug1");
+            await sut.SaveShortUrlAsync("https://second.com", "slug2");
+
+            // Act
+            var result1 = await sut.GetOriginalUrlAsync("slug1");
+            var result2 = await sut.GetOriginalUrlAsync("slug2");
+
+            // Assert
+            result1.Should().Be("https://first.com");
+            result2.Should().Be("https://second.com");
+        }
         #endregion
     }
 }
