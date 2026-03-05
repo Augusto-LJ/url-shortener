@@ -134,4 +134,43 @@ public class UrlShortenerServiceUnitTests
     }
     #endregion
 
+    #region GetOriginalUrlAsync
+    [Fact]
+    [Trait("Category", "Unit")]
+    public async Task GetOriginalUrlAsync_SlugExists_ReturnsOriginalUrl()
+    {
+        // Arrange
+        string slug = "exmpl123";
+        string originalUrl = "http://example.com";
+
+        _repositoryMock.Setup(x => x.GetOriginalUrlBySlugAsync(It.IsAny<string>()))
+            .ReturnsAsync(new ShortUrl { Slug = slug, OriginalUrl = originalUrl });
+
+        // Act
+        var result = await _sut.GetOriginalUrlAsync(slug);
+
+        // Assert
+        result.Should().Be(originalUrl);
+        _repositoryMock.Verify(x => x.GetOriginalUrlBySlugAsync(slug), Times.Once);
+    }
+
+    [Fact]
+    [Trait("Category", "Unit")]
+    public async Task GetOriginalUrlAsync_SlugDoesNotExist_ReturnsNull()
+    {
+        // Arrange
+        string slug = "doNotEx1";
+
+        _repositoryMock.Setup(x => x.GetOriginalUrlBySlugAsync(It.IsAny<string>()))
+            .ReturnsAsync((ShortUrl?)null);
+
+        // Act
+        var result = await _sut.GetOriginalUrlAsync(slug);
+
+        // Assert
+        result.Should().BeNull();
+        _repositoryMock.Verify(x => x.GetOriginalUrlBySlugAsync(slug), Times.Once);
+    }
+
+    #endregion
 }
