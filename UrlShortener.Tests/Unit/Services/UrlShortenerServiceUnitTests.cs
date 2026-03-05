@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using UrlShortener.API.Data;
+using UrlShortener.API.Models.Entities;
 using UrlShortener.API.Services;
 using UrlShortener.API.Services.Interfaces;
 
@@ -71,7 +72,7 @@ public class UrlShortenerServiceUnitTests
         _repositoryMock.Setup(x => x.SlugExistsAsync(collidingSlug)).ReturnsAsync(true);
 
         // Act
-        var result = () => _sut.CreateUniqueSlugAsync();
+        Func<Task> result = async () => await _sut.CreateUniqueSlugAsync();
 
         // Assert
         await result.Should().ThrowAsync<InvalidOperationException>()
@@ -79,4 +80,58 @@ public class UrlShortenerServiceUnitTests
         _slugGeneratorMock.Verify(x => x.GenerateSlug(), Times.Exactly(10));
     }
     #endregion
+
+    #region SaveShortUrlAsync
+    [Fact]
+    [Trait("Category", "Unit")]
+    public async Task SaveShortUrlAsync_ValidData_CallsRepository()
+    {
+        // Arrange
+        string url = "http://example.com";
+        string slug = "exmpl123";
+
+        _repositoryMock.Setup(x => x.SaveShortUrlAsync(It.IsAny<ShortUrl>())).Returns(Task.CompletedTask);
+
+        // Act
+        await _sut.SaveShortUrlAsync(url, slug);
+
+        // Assert
+        _repositoryMock.Verify(x => x.SaveShortUrlAsync(It.Is<ShortUrl>(su => su.OriginalUrl == url && su.Slug == slug)), Times.Once);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    [Trait("Category", "Unit")]
+    public async Task SaveShortUrlAsync_EmptyOrNullUrl_ThrowsArgumentException(string url)
+    {
+        // Arrange
+        string validSlug = "valid123";
+        _repositoryMock.Setup(x => x.SaveShortUrlAsync(It.IsAny<ShortUrl>())).Throws<ArgumentException>();
+
+        // Act
+        Func<Task> act = async () => await _sut.SaveShortUrlAsync(url, validSlug);
+
+        // Assert
+        await act.Should().ThrowAsync<ArgumentException>();
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    [Trait("Category", "Unit")]
+    public async Task SaveShortUrlAsync_EmptyOrNullSlug_ThrowsArgumentException(string slug)
+    {
+        // Arrange
+        string validUrl = "http://example.com";
+        _repositoryMock.Setup(x => x.SaveShortUrlAsync(It.IsAny<ShortUrl>())).Throws<ArgumentException>();
+
+        // Act
+        Func<Task> act = async () => await _sut.SaveShortUrlAsync(validUrl, slug);
+
+        // Assert
+        await act.Should().ThrowAsync<ArgumentException>();
+    }
+    #endregion
+
 }
