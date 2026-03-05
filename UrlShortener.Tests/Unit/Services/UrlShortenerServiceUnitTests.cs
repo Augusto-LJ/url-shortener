@@ -144,7 +144,7 @@ public class UrlShortenerServiceUnitTests
         string originalUrl = "http://example.com";
 
         _repositoryMock.Setup(x => x.GetOriginalUrlBySlugAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ShortUrl { Slug = slug, OriginalUrl = originalUrl });
+            .ReturnsAsync(new ShortUrl(originalUrl, slug));
 
         // Act
         var result = await _sut.GetOriginalUrlAsync(slug);

@@ -1,5 +1,4 @@
-﻿using UrlShortener.API.Contexts;
-using UrlShortener.API.Data;
+﻿using UrlShortener.API.Data;
 using UrlShortener.API.Models.Entities;
 using UrlShortener.API.Services.Interfaces;
 
@@ -31,11 +30,7 @@ namespace UrlShortener.API.Services
             ArgumentException.ThrowIfNullOrWhiteSpace(originalUrl);
             ArgumentException.ThrowIfNullOrWhiteSpace(slug);
 
-            var shortUrl = new ShortUrl
-            {
-                OriginalUrl = originalUrl,
-                Slug = slug
-            };
+            var shortUrl = new ShortUrl(originalUrl, slug);
 
             await _repository.SaveShortUrlAsync(shortUrl);
         }

@@ -2,10 +2,18 @@
 {
     public class ShortUrl
     {
-        public int Id { get; set; }
-        public required string OriginalUrl { get; set; } = null!;
-        public required string Slug { get; set; } = null!;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime ExpiresAt { get; set; } = DateTime.UtcNow.AddYears(1);
+        public int Id { get; private set; }
+        public string OriginalUrl { get; private set; }
+        public string Slug { get; private set; }
+        public DateTime CreatedAt { get; private set; }
+        public DateTime ExpiresAt { get; private set; }
+
+        public ShortUrl(string originalUrl, string slug)
+        {
+            OriginalUrl = originalUrl;
+            Slug = slug;
+            CreatedAt = DateTime.UtcNow;
+            ExpiresAt = CreatedAt.AddYears(1);
+        }
     }
 }

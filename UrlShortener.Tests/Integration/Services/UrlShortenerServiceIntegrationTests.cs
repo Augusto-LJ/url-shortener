@@ -66,7 +66,7 @@ namespace UrlShortener.Tests.Integration.Services
             var sut = CreateService(context);
 
             var existingSlug = await sut.CreateUniqueSlugAsync();
-            context.ShortUrls.Add(new ShortUrl { OriginalUrl = "http://test.com", Slug = existingSlug });
+            context.ShortUrls.Add(new ShortUrl("http://test.com", existingSlug));
             await context.SaveChangesAsync();
 
             // Act
