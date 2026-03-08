@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using UrlShortener.API.Contexts;
 using UrlShortener.API.Models.Entities;
@@ -39,7 +40,16 @@ public class UrlShortenerRepository(ApplicationDbContext context) : IUrlShortene
 
     private static bool IsUniqueViolation(DbUpdateException ex)
     {
-        return ex.InnerException is PostgresException pg &&
-               pg.SqlState == PostgresErrorCodes.UniqueViolation;
+        // Check for PostgreSQL unique constraint violation
+        if (ex.InnerException is PostgresException pg &&
+            pg.SqlState == PostgresErrorCodes.UniqueViolation)
+            return true;
+
+        // Check for SQLite unique constraint violation (error code 19)
+        if (ex.InnerException is SqliteException sqlite &&
+            sqlite.SqliteErrorCode == 19) // SQLITE_CONSTRAINT
+            return true;
+
+        return false;
     }
 }
