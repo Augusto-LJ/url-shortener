@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using UrlShortener.API.Contexts;
+using UrlShortener.API.Controllers;
+using UrlShortener.API.Controllers.Interfaces;
 using UrlShortener.API.Data;
 using UrlShortener.API.Services;
 using UrlShortener.API.Services.Interfaces;
@@ -17,6 +19,7 @@ builder.Services.AddScoped<IUrlShortenerRepository, UrlShortenerRepository>();
 builder.Services.AddScoped<IUrlShortenerService, UrlShortenerService>();
 builder.Services.AddScoped<ISlugGenerator, SlugGenerator>();
 builder.Services.AddScoped<IUrlValidator, UrlValidator>();
+builder.Services.AddScoped<IUrlBuilder, UrlBuilder>();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 // CORS

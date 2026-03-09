@@ -6,7 +6,6 @@ using UrlShortener.API.Services.Interfaces;
 namespace UrlShortener.API.Controllers
 {
     [ApiController]
-    [Route("api")]
     public class UrlShortenerController(IUrlShortenerService urlShortenerService,
                                         IUrlValidator urlValidator,
                                         IUrlBuilder urlBuilder) : ControllerBase
@@ -30,7 +29,7 @@ namespace UrlShortener.API.Controllers
             var slug = await _urlShortenerService.CreateUniqueSlugAsync();
             await _urlShortenerService.SaveShortUrlAsync(request.Url, slug);
 
-            var shortUrl = _urlBuilder.BuildShortUrl(slug);
+            var shortUrl = _urlBuilder.BuildShortUrl(slug, Request);
             return Ok(shortUrl);
         }
 

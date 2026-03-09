@@ -2,5 +2,5 @@
 
 public interface IUrlBuilder
 {
-    string? BuildShortUrl(string slug);
+    string? BuildShortUrl(string slug, HttpRequest request);
 }

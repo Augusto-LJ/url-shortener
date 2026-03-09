@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using UrlShortener.API.Controllers;
@@ -35,10 +36,15 @@ public class UrlShortenerControllerUnitTests
         var request = new ShortenRequest { Url = "https://example.com" };
         const string slug = "aBc12345";
         const string shortUrl = "http://test.com/aBc12345";
+        var httpRequest = new DefaultHttpContext().Request;
 
         _validatorMock.Setup(x => x.RequestDataIsValid(request.Url)).Returns(true);
         _serviceMock.Setup(x => x.CreateUniqueSlugAsync()).ReturnsAsync(slug);
-        _urlBuilderMock.Setup(x => x.BuildShortUrl(slug)).Returns(shortUrl);
+        _urlBuilderMock.Setup(x => x.BuildShortUrl(slug, httpRequest)).Returns(shortUrl);
+        _sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = httpRequest.HttpContext
+        };
 
         // Act
         var result = await _sut.ShortenAsync(request);
@@ -55,9 +61,11 @@ public class UrlShortenerControllerUnitTests
         // Arrange
         var request = new ShortenRequest { Url = "https://example.com" };
         const string slug = "aBc12345";
+        var httpRequest = new DefaultHttpContext().Request;
+
         _validatorMock.Setup(x => x.RequestDataIsValid(request.Url)).Returns(true);
         _serviceMock.Setup(x => x.CreateUniqueSlugAsync()).ReturnsAsync(slug);
-        _urlBuilderMock.Setup(x => x.BuildShortUrl(slug)).Returns("http://test.com/aBc12345");
+        _urlBuilderMock.Setup(x => x.BuildShortUrl(slug, httpRequest)).Returns("http://test.com/aBc12345");
 
         // Act
         await _sut.ShortenAsync(request);
