@@ -8,9 +8,9 @@ This project goes beyond a simple CRUD by addressing concerns such as unique slu
 - ✅ Planning
 - ✅ Design
 - ✅ Implementation
-- 🛠️ **Testing**
-- 🔜 Deployment
-- 🔜 Maintenance
+- ✅ Testing
+- ✅ Deployment
+- 🛠️ Maintenance
 
 ## 🚀 Technologies Used
 
@@ -40,6 +40,7 @@ This project goes beyond a simple CRUD by addressing concerns such as unique slu
     - Services
     - Data / Context
   - Dependency Injection
+  - Clean Code & SOLID
   - Async/await throughout the data layer
   - Clear separation of concerns between backend and frontend
 
@@ -56,7 +57,8 @@ This project goes beyond a simple CRUD by addressing concerns such as unique slu
 
 ## 💻 Demo
 
-<img width="1874" height="935" alt="image" src="https://github.com/user-attachments/assets/a44a9593-4be9-4dd8-aeab-25e24e2c2a97" />
+<img width="1764" height="830" alt="image" src="https://github.com/user-attachments/assets/391f929f-ff31-45ad-a962-676ca51c31d4" />
+
 
 ## 🛠️ How the Application Works
 1. The user enters a long URL in the frontend
@@ -70,8 +72,7 @@ This project goes beyond a simple CRUD by addressing concerns such as unique slu
 
 # 🧪 Local Development Setup
 **Prerequisites**
-- Docker
-- Docker Compose
+- Docker Desktop
 - Git
 
 ## Steps to Run Locally
@@ -89,7 +90,6 @@ docker compose up --build
 3. Access the services:
     - Frontend: http://localhost:3000
     - Backend API: http://localhost:5000
-    - Swagger UI: http://localhost:5000/swagger
 
 The application is fully configured to:
 - Run the API and database inside containers
@@ -98,7 +98,6 @@ The application is fully configured to:
 - Allow local frontend ↔ backend communication via CORS
 
 ## 🔜 Future improvements
-- Automated testes (unit and integration)
 - CI/CD pipeline
 - Caching layer (e.g. Redis)
 - Observability (logging, metrics)
