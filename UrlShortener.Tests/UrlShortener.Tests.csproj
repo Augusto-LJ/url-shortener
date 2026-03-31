@@ -35,6 +35,7 @@
     <Folder Include="Integration\Persistence\" />
     <Folder Include="Shared\Helpers\" />
     <Folder Include="Shared\Constants\" />
+    <Folder Include="Unit\Controllers\" />
     <Folder Include="Unit\Utilities\" />
     <Folder Include="Unit\Validation\" />
   </ItemGroup>

@@ -2,7 +2,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using UrlShortener.API.Controllers;
 
-namespace UrlShortener.Tests.Unit.Controllers;
+namespace UrlShortener.Tests.Unit.Controller;
 
 public class UrlBuilderUnitTests
 {
